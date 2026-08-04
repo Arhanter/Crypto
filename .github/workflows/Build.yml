@@ -14,20 +14,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - run: |
-          pyinstaller crypto_gui.py `
-            --onefile `
-            --windowed `
-            --name CryptoToolkit `
-            --hidden-import=cryptography.hazmat.primitives.asymmetric.ed25519 `
-            --hidden-import=cryptography.hazmat.primitives.asymmetric.x25519 `
-            --hidden-import=cryptography.hazmat.primitives.ciphers.aead `
-            --hidden-import=cryptography.hazmat.primitives.kdf.hkdf `
-            --hidden-import=argon2.low_level
+      - name: Build .exe
+        run: |
+          pyinstaller crypto_gui.py --onefile --windowed --name CryptoToolkit --hidden-import=cryptography.hazmat.primitives.asymmetric.ed25519 --hidden-import=cryptography.hazmat.primitives.asymmetric.x25519 --hidden-import=cryptography.hazmat.primitives.ciphers.aead --hidden-import=cryptography.hazmat.primitives.kdf.hkdf --hidden-import=argon2.low_level
 
-      - run: |
+      - name: Clean up
+        run: |
           Remove-Item -Recurse -Force build -ErrorAction SilentlyContinue
           Remove-Item crypto_gui.spec -ErrorAction SilentlyContinue
 
